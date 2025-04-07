@@ -7,6 +7,7 @@ public class Input_output implements Processo {
     int prioridade;
     Estado estado;
     int creditos;
+    int surto_inicial;
 
     public Input_output(String nome, int surto_CPU, int tempo_es, int tempo_total_CPU, int ordem, int prioridade) {
         this.nome = nome;
@@ -17,6 +18,7 @@ public class Input_output implements Processo {
         this.prioridade = prioridade;
         this.estado = Estado.READY;
         this.creditos = prioridade;
+        this.surto_inicial = surto_CPU;
     }
 
     public String getNome() {
@@ -51,11 +53,19 @@ public class Input_output implements Processo {
         return creditos;
     }
 
+    public int getSurto_inicial() {
+        return surto_inicial;
+    }
+
     public void setCreditos(int novos_creditos) {
         creditos = novos_creditos;
     }
 
     public void setEstado(Estado novo_estado) {
         estado = novo_estado;
+    }
+
+    public void setSurto_inicial(int novo_surto_inicial) {
+        surto_inicial = novo_surto_inicial;
     }
 }

@@ -13,5 +13,4 @@ public class Main {
         Escalonador escalonador = new Escalonador(processos);
         escalonador.executar();
     }
-
 }
