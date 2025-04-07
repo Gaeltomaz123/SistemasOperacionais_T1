@@ -1,16 +1,32 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
 public class Escalonador {
-    public static void main(String[] args) {
-        // Criação de processos
+    Queue<Processo> ready;
+    int temporizador = 0;
+    List<Processo> finalizados = new ArrayList<>();
+    int quantidade_processos;
 
-        // Entrada e saída
-        Processo a = new Input_output("A", 2, 5, 6, 1, 3);
-        Processo b = new Input_output("B", 3, 10, 6, 2, 3);
-
-        // Cpu_bound
-        Processo c = new Cpu_bound("C", 14, 3, 3);
-        Processo d = new Cpu_bound("D", 10, 4, 3);
-
-
-        System.out.println(a.getNome());
+    public Escalonador(Queue<Processo> ready) {
+        this.ready = ready;
+        this.quantidade_processos = ready.size();
     }
+
+    public void executar() {
+        Processo selecionado = ready.poll();
+        while(finalizados.size() != quantidade_processos) {
+            if(selecionado.getCreditos() > 0) {
+                selecionado.setEstado(Estado.RUNNING);
+                selecionado.setCreditos(selecionado.getCreditos() - 1);
+                temporizador++;
+                System.out.println(selecionado.getNome());
+            }
+            else {
+                finalizados.add(selecionado);
+                selecionado = ready.poll();
+            }
+        }
+    }
+
 }
