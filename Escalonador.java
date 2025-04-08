@@ -72,6 +72,11 @@ public class Escalonador {
                 bloqueados.remove(retirado);
             }
 
+            //mudar
+            if(selecionado.getCreditos() == 0) {
+                restart.add(selecionado);
+            }
+
             
 
             if(selecionado.getTempo_total_CPU() == 0) {
