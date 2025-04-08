@@ -7,4 +7,5 @@ public interface Processo {
     public int getCreditos();
     public void setCreditos(int novos_creditos);
     public void setEstado(Estado novo_estado);
+    public void setTempo_total_CPU(int novo_tempo);
 }

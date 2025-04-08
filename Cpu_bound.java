@@ -46,4 +46,8 @@ public class Cpu_bound implements Processo {
     public void setEstado(Estado novo_estado) {
         estado = novo_estado;
     }
+
+    public void setTempo_total_CPU(int novo_tempo) {
+        tempo_total_CPU = novo_tempo;
+    }
 }
