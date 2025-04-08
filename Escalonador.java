@@ -72,20 +72,7 @@ public class Escalonador {
                 bloqueados.remove(retirado);
             }
 
-            if(selecionado.getCreditos() == 0) {
-                restart.add(selecionado);
-            }
-
-            if(restart.size() == quantidade_processos) {
-                if(!ready.isEmpty()) {
-                    for (Processo processo : restart) {
-                        processo.setCreditos(3);
-                    }
-                    restart.remove(selecionado);
-                    System.out.println(selecionado.getNome());
-                }
-                
-            }
+            
 
             if(selecionado.getTempo_total_CPU() == 0) {
                 System.out.println(selecionado.getNome() + " Terminou");
