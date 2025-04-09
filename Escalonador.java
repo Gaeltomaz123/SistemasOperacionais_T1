@@ -74,7 +74,7 @@ public class Escalonador {
 
             //mudar
             if(selecionado.getCreditos() == 0) {
-                restart.add(selecionado);
+                selecionado.setOrdem((selecionado.getOrdem() - 1) % quantidade_processos);
             }
 
             

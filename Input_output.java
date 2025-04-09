@@ -82,4 +82,8 @@ public class Input_output implements Processo {
     public void setTempo_total_CPU(int novo_tempo) {
         tempo_total_CPU = novo_tempo;
     }
+
+    public void setOrdem(int nova_ordem) {
+        ordem = nova_ordem;
+    }
 }
