@@ -99,10 +99,10 @@ public class Escalonador {
                 
             }
         
-            System.out.println("restart: " + restart);
-            System.out.println("quant: " + quantidade_processos);
             
-            if(restart == quantidade_processos) {
+            //RUnning tem que estar com 0 dcreditos
+            // REady tem que estar com 0 creditos
+            if(selecionado.getCreditos() == 0 && validoParaRedistribuicao(ready)) {
                 selecionado.setCreditos((selecionado.getCreditos()/2) + selecionado.getPrioridade());
                
                 for(Processo bloqueado : bloqueados) {
@@ -126,5 +126,17 @@ public class Escalonador {
                 }
             }
         }
+    }
+
+    public boolean validoParaRedistribuicao(Queue<Processo>prontos){
+        int count = 0;
+        for(Processo processo : prontos) {
+            if(processo.getCreditos() == 0) {
+                count++;
+            }
+        }
+        if(count == prontos.size())
+            return true;
+        return false;
     }
 }
