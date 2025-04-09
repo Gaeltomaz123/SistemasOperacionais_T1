@@ -5,7 +5,6 @@ public class Input_output implements Processo {
     int tempo_total_CPU;
     int ordem;
     int prioridade;
-    Estado estado;
     int creditos;
     int surto_count;
     int es_count;
@@ -17,7 +16,6 @@ public class Input_output implements Processo {
         this.tempo_total_CPU = tempo_total_CPU;
         this.ordem = ordem;
         this.prioridade = prioridade;
-        this.estado = Estado.READY;
         this.creditos = prioridade;
         this.surto_count = surto_CPU;
         this.es_count = tempo_es;
@@ -47,10 +45,6 @@ public class Input_output implements Processo {
         return prioridade;
     }
 
-    public Estado getEstado() {
-        return estado;
-    }
-
     public int getCreditos() {
         return creditos;
     }
@@ -67,9 +61,6 @@ public class Input_output implements Processo {
         creditos = novos_creditos;
     }
 
-    public void setEstado(Estado novo_estado) {
-        estado = novo_estado;
-    }
 
     public void setSurto_count(int novo_surto_count) {
         surto_count = novo_surto_count;

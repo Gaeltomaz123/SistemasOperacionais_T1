@@ -9,6 +9,11 @@ public class Escalonador {
     int quantidade_processos;
     List<Processo> bloqueados = new ArrayList<>();
     int restart = 0;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     public Escalonador(Queue<Processo> ready) {
         this.ready = ready;
@@ -25,11 +30,11 @@ public class Escalonador {
             if(selecionado instanceof Input_output) {
                 int surto_count = ((Input_output) selecionado).getSurto_count();
                 if(surto_count > 0 && selecionado.getCreditos() > 0) {
-                    selecionado.setEstado(Estado.RUNNING);
+                    
                     selecionado.setCreditos(selecionado.getCreditos() - 1);
                     selecionado.setTempo_total_CPU(selecionado.getTempo_total_CPU() - 1);
                     ((Input_output) selecionado).setSurto_count(surto_count - 1);
-                    System.out.println(temporizador + selecionado.getNome());
+                    System.out.println(ANSI_BLUE + "Tempo: " + temporizador + " - Processo " + selecionado.getNome() + " - Créditos: " + selecionado.getCreditos() + " - Running" + ANSI_RESET);
                 }
                 else {
                     check = 0;
@@ -43,10 +48,9 @@ public class Escalonador {
             // CPU Bound
             else {
                 if (selecionado.getCreditos() > 0) {
-                    selecionado.setEstado(Estado.RUNNING);
                     selecionado.setCreditos(selecionado.getCreditos() - 1);
                     selecionado.setTempo_total_CPU(selecionado.getTempo_total_CPU() - 1);
-                    System.out.println(temporizador + selecionado.getNome());
+                    System.out.println(ANSI_BLUE + "Tempo: " + temporizador  + " - Processo " + selecionado.getNome() + " - Créditos: " + selecionado.getCreditos() + " - Running" + ANSI_RESET);
                 } else {
                     check = 0;
                     ready.add(selecionado);
@@ -62,7 +66,7 @@ public class Escalonador {
                 Processo retirado = null;
                 for (Processo processo : bloqueados) {
                     if(((Input_output) processo).getEs_count() > 0) {
-                        System.out.println(temporizador + processo.getNome() + ((Input_output) processo).getEs_count());
+                        System.out.println(ANSI_YELLOW + "Tempo: " + temporizador + " - Processo " + processo.getNome() + " - Créditos: " + processo.getCreditos() + " - Blocked" + ANSI_RESET);
                         ((Input_output) processo).setEs_count(((Input_output) processo).getEs_count() - 1);
                     } else {
                         ((Input_output) processo).setEs_count(((Input_output) processo).getTempo_es());
@@ -71,6 +75,12 @@ public class Escalonador {
                     }
                 }
                 bloqueados.remove(retirado);
+            }
+
+            if(!ready.isEmpty() && check == 1) {
+                for(Processo processo : ready) {
+                    System.out.println(ANSI_GREEN + "Tempo: " + temporizador + " - Processo " + processo.getNome() + " - Créditos: " + processo.getCreditos() + " - Ready" + ANSI_RESET);
+                }
             }
 
             //mudar
@@ -88,6 +98,9 @@ public class Escalonador {
               
                 
             }
+        
+            System.out.println("restart: " + restart);
+            System.out.println("quant: " + quantidade_processos);
             
             if(restart == quantidade_processos) {
                 selecionado.setCreditos((selecionado.getCreditos()/2) + selecionado.getPrioridade());
@@ -106,7 +119,7 @@ public class Escalonador {
             }
 
             if(selecionado.getTempo_total_CPU() == 0) {
-                System.out.println(temporizador + selecionado.getNome() + " Terminou");
+                System.out.println(ANSI_RED + "Tempo: " + (temporizador+1) + " - Processo " + selecionado.getNome() + " - Exit" + ANSI_RESET);
                 finalizados.add(selecionado);
                 if(!ready.isEmpty()) {
                     selecionado = ready.poll();
