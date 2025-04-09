@@ -8,7 +8,7 @@ public class Escalonador {
     List<Processo> finalizados = new ArrayList<>();
     int quantidade_processos;
     List<Processo> bloqueados = new ArrayList<>();
-    List<Processo> restart = new ArrayList<>();
+    int restart = 0;
 
     public Escalonador(Queue<Processo> ready) {
         this.ready = ready;
@@ -52,6 +52,7 @@ public class Escalonador {
                     ready.add(selecionado);
                     selecionado = ready.poll();
                     temporizador--;
+                    
                 }
                 
             }
@@ -73,14 +74,39 @@ public class Escalonador {
             }
 
             //mudar
-            if(selecionado.getCreditos() == 0) {
-                selecionado.setOrdem((selecionado.getOrdem() - 1) % quantidade_processos);
+            if(selecionado.getCreditos() == 0 && selecionado.getTempo_total_CPU() != 0) {
+                restart++;
+                while(selecionado.getOrdem() < quantidade_processos) {
+                    selecionado.setOrdem(selecionado.getOrdem() + 1);
+                    for(Processo bloqueado : bloqueados) {
+                        bloqueado.setOrdem((bloqueado.getOrdem() + 1) % quantidade_processos);
+                    }
+                    for(Processo pronto : ready) {          
+                        pronto.setOrdem((pronto.getOrdem() + 1) % quantidade_processos);
+                    }
+                }
+              
+                
+            }
+            
+            if(restart == quantidade_processos) {
+                selecionado.setCreditos((selecionado.getCreditos()/2) + selecionado.getPrioridade());
+               
+                for(Processo bloqueado : bloqueados) {
+                    bloqueado.setCreditos((bloqueado.getCreditos()/2) + bloqueado.getPrioridade());
+                   
+                }
+                for(Processo pronto : ready) {
+                    pronto.setCreditos((pronto.getCreditos()/2) + pronto.getPrioridade());
+                    
+                }
+                ready.add(selecionado);
+                restart = 0;
+                selecionado = ready.poll();
             }
 
-            
-
             if(selecionado.getTempo_total_CPU() == 0) {
-                System.out.println(selecionado.getNome() + " Terminou");
+                System.out.println(temporizador + selecionado.getNome() + " Terminou");
                 finalizados.add(selecionado);
                 if(!ready.isEmpty()) {
                     selecionado = ready.poll();
