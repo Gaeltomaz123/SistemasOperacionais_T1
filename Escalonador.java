@@ -8,7 +8,6 @@ public class Escalonador {
     List<Processo> finalizados = new ArrayList<>();
     int quantidade_processos;
     List<Processo> bloqueados = new ArrayList<>();
-    int restart = 0;
     // Cores texto
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -92,7 +91,6 @@ public class Escalonador {
 
             // Se um processo chegar a 0 creditos, altera ordem  do mesmo para mais a alta, reeordenando todos os outros tambem de forma circular
             if(selecionado.getCreditos() == 0 && selecionado.getTempo_total_CPU() != 0) {
-                restart++;
                 while(selecionado.getOrdem() < quantidade_processos) {
                     selecionado.setOrdem(selecionado.getOrdem() + 1);
                     for(Processo bloqueado : bloqueados) {
@@ -120,7 +118,6 @@ public class Escalonador {
                     
                 }
                 ready.add(selecionado);
-                restart = 0;
                 selecionado = ready.poll();
             }
 
